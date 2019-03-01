@@ -27,6 +27,8 @@ import com.company.customer.entity.IdentityType;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CustomerControllerTest extends BaseTest {
 
+	private static String id;
+
 	public CustomerControllerTest() {
 		super("/customers");
 	}
@@ -67,17 +69,16 @@ public class CustomerControllerTest extends BaseTest {
 				.perform(post(getUri()).contentType(MediaType.APPLICATION_JSON_VALUE).content(asJson(customer)))
 				.andExpect(status().isCreated()).andReturn();
 
-		readIdFromLocation(result);
+		id = getIdFromLocation(result);
 
 	}
 
 	@Test
 	public void test2_one() throws Exception {
-		MvcResult response = mvc
-				.perform(get(getUri()).contentType(MediaType.APPLICATION_JSON_VALUE).param("id", getId()))
+		MvcResult response = mvc.perform(get(getUri()).contentType(MediaType.APPLICATION_JSON_VALUE).param("id", id))
 				.andExpect(status().isOk()).andReturn();
 
-		assertTrue(response.getResponse().getContentAsString().contains(getId()));
+		assertTrue(response.getResponse().getContentAsString().contains(id));
 
 	}
 
@@ -91,7 +92,7 @@ public class CustomerControllerTest extends BaseTest {
 
 		Customer customer = getCustomer();
 
-		mvc.perform(put(getUriId()).contentType(MediaType.APPLICATION_JSON_VALUE).content(asJson(customer)))
+		mvc.perform(put(getUri() + "/" + id).contentType(MediaType.APPLICATION_JSON_VALUE).content(asJson(customer)))
 				.andExpect(status().isOk());
 
 	}
@@ -99,7 +100,8 @@ public class CustomerControllerTest extends BaseTest {
 	@Test
 	public void test5_remove() throws Exception {
 
-		mvc.perform(delete(getUriId()).contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk());
+		mvc.perform(delete(getUri() + "/" + id).contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(status().isOk());
 	}
 
 }

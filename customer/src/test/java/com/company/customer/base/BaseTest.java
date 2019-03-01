@@ -18,16 +18,14 @@ public abstract class BaseTest {
 
 	private String uri;
 
-	private static String id;
-
 	private ObjectMapper mapper;
 
 	@Autowired
-	protected WebApplicationContext context;
+	private WebApplicationContext context;
+	
+	private boolean initialized;
 
 	protected MockMvc mvc;
-
-	private boolean initialized;
 
 	public BaseTest(String uri) {
 		this.uri = uri;
@@ -35,14 +33,6 @@ public abstract class BaseTest {
 
 	protected String getUri() {
 		return uri;
-	}
-
-	protected String getId() {
-		return id;
-	}
-
-	protected String getUriId() {
-		return getUri() + "/" + getId();
 	}
 
 	public String asJson(Object object) {
@@ -64,11 +54,11 @@ public abstract class BaseTest {
 		this.initialized = true;
 	}
 
-	protected void readIdFromLocation(MvcResult result) {
+	protected String getIdFromLocation(MvcResult result) {
 
 		String location = result.getResponse().getHeader("Location");
 		String[] arr = location.split("/");
-		id = arr[arr.length - 1];
+		return arr[arr.length - 1];
 
 	}
 
