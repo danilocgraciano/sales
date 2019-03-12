@@ -9,7 +9,6 @@ CREATE TABLE public.order(
   order_customeridentity TEXT NOT NULL,
   order_customeridentitytype TEXT NOT NULL,
   order_customeremail TEXT NOT NULL,
-  order_customergender TEXT NOT NULL,
   order_deliveryaddressstreet TEXT NOT NULL,
   order_deliveryaddressnumber TEXT NOT NULL,
   order_deliveryaddresscomplement TEXT,

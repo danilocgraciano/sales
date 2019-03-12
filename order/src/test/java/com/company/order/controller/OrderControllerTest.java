@@ -23,7 +23,6 @@ import com.company.order.entity.Order;
 import com.company.order.entity.OrderStatus;
 import com.company.order.entity.customer.Customer;
 import com.company.order.entity.customer.DeliveryAddress;
-import com.company.order.entity.customer.Gender;
 import com.company.order.entity.customer.IdentityType;
 import com.company.order.entity.item.Item;
 import com.company.order.entity.item.Unit;
@@ -80,7 +79,6 @@ public class OrderControllerTest extends BaseTest {
 		Customer customer = new Customer();
 		customer.setId(UUID.randomUUID().toString());
 		customer.setEmail("teste@email.com");
-		customer.setGender(Gender.MALE);
 		customer.setIdentity("00000000000");
 		customer.setIdentityType(IdentityType.CPF);
 		customer.setName("Customer");
