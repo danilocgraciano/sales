@@ -51,6 +51,18 @@ public class Order {
 	@Column(name = OrderConstants.TOTAL, scale = 2)
 	private double ammount;
 
+	public void create() {
+		setStatus(status.created(this));
+	}
+
+	public void pending() {
+		setStatus(status.pending(this));
+	}
+
+	public void approved() {
+		setStatus(status.approved(this));
+	}
+
 	public String getId() {
 		return id;
 	}
@@ -64,7 +76,11 @@ public class Order {
 	}
 
 	public void setStatus(OrderStatus status) {
-		this.status = status;
+
+		if (status != null && status != this.status) {
+			System.out.println("Order#" + id + ": changing status from " + this.status + " to " + status);
+			this.status = status;
+		}
 	}
 
 	public Customer getCustomer() {

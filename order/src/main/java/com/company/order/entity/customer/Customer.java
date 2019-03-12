@@ -33,11 +33,6 @@ public class Customer {
 	@NotBlank(message = "Email is required")
 	private String email;
 
-	@Column(name = OrderConstants.CUSTOMER_GENDER)
-	@Enumerated(EnumType.STRING)
-	@NotNull(message = "Identity Type is required")
-	private Gender gender;
-
 	public String getId() {
 		return id;
 	}
@@ -76,14 +71,6 @@ public class Customer {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public Gender getGender() {
-		return gender;
-	}
-
-	public void setGender(Gender gender) {
-		this.gender = gender;
 	}
 
 }

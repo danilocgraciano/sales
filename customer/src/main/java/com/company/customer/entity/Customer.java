@@ -54,7 +54,6 @@ public class Customer {
 
 	@Column(name = CustomerConstants.GENDER)
 	@Enumerated(EnumType.STRING)
-	@NotNull(message = "Identity Type is required")
 	private Gender gender;
 
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
