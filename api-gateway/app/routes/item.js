@@ -1,5 +1,5 @@
 const httpProxy = require('express-http-proxy');
-const serviceProxy = httpProxy('http://localhost:8082');
+const serviceProxy = httpProxy('http://localhost:8080');
 
 let proxyFunction = (req, res, next) => {
     serviceProxy(req, res, next);
