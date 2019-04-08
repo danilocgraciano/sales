@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.company.orders.builder.OrderBuilder;
@@ -32,6 +34,37 @@ public class OrderServiceTest {
 
 	@Autowired
 	private OrderService service;
+
+	@TestConfiguration
+	static class OrderMessageServiceTestConfigurationContext {
+
+		String BROKER_URL = "tcp://localhost:61616";
+		String BROKER_USERNAME = "admin";
+		String BROKER_PASSWORD = "admin";
+
+		@Bean
+		public ActiveMQConnectionFactory connectionFactory() {
+			ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
+			connectionFactory.setBrokerURL(BROKER_URL);
+			connectionFactory.setPassword(BROKER_USERNAME);
+			connectionFactory.setUserName(BROKER_PASSWORD);
+			return connectionFactory;
+		}
+
+		@Bean
+		public JmsTemplate jmsTemplate() {
+			JmsTemplate template = new JmsTemplate();
+			template.setConnectionFactory(connectionFactory());
+			template.setPubSubDomain(true);
+			return template;
+		}
+
+		@Bean
+		public OrderMessageService orderMessageService() {
+			return new OrderMessageService();
+		}
+
+	}
 
 	@TestConfiguration
 	static class OrderServiceTestConfigurationContext {

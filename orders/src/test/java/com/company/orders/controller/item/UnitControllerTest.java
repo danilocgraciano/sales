@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +48,7 @@ public class UnitControllerTest {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		Unit unit = new UnitBuilder().buildDefault();
+		Unit unit = new UnitBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 		when(service.save(unit)).thenReturn(unit);
 
 		mvc.perform(post(this.uri).contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -61,7 +62,7 @@ public class UnitControllerTest {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		Unit unit = new UnitBuilder().buildDefault();
+		Unit unit = new UnitBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 		when(service.save(unit)).thenReturn(unit);
 
 		mvc.perform(put(this.uri + "/" + unit.getId()).contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -72,7 +73,7 @@ public class UnitControllerTest {
 	@Test
 	public void remove() throws Exception {
 
-		Unit unit = new UnitBuilder().buildDefault();
+		Unit unit = new UnitBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 		mvc.perform(delete(this.uri + "/" + unit.getId()).contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(status().isOk());
 
@@ -81,7 +82,7 @@ public class UnitControllerTest {
 	@Test
 	public void findOne() throws Exception {
 
-		Unit unit = new UnitBuilder().buildDefault();
+		Unit unit = new UnitBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 
 		when(service.findById(unit.getId())).thenReturn(unit);
 
@@ -92,8 +93,8 @@ public class UnitControllerTest {
 	@Test
 	public void findAll() throws Exception {
 
-		Unit unit1 = new UnitBuilder().buildDefault();
-		Unit unit2 = new UnitBuilder().buildDefault();
+		Unit unit1 = new UnitBuilder().withId(UUID.randomUUID().toString()).buildDefault();
+		Unit unit2 = new UnitBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 
 		when(service.findAll(PageRequest.of(0, 20))).thenReturn(new PageImpl<Unit>(Arrays.asList(unit1, unit2)));
 

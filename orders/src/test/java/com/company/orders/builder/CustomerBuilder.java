@@ -23,7 +23,6 @@ public class CustomerBuilder {
 
 	public Customer buildDefault() {
 
-//		this.id = UUID.randomUUID().toString();
 		this.birthDate = new Date();
 		this.email = "email@company.com";
 		this.gender = Gender.FEMALE;
@@ -60,6 +59,11 @@ public class CustomerBuilder {
 		customer.setName(this.name);
 
 		return customer;
+	}
+	
+	public CustomerBuilder withId(String id) {
+		this.id = id;
+		return this;
 	}
 
 }

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.company.orders.entity.order.Order;
+import com.company.orders.messaging.MessageType;
+import com.company.orders.service.order.OrderMessageService;
 import com.company.orders.service.order.OrderService;
 
 @RestController
@@ -28,11 +30,12 @@ public class OrderController {
 
 	@Autowired
 	private OrderService service;
-
+	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> save(@Valid @RequestBody(required = true) Order order) throws Exception {
 
 		service.save(order);
+		service.sendMessage(MessageType.UPINSERTED, order);
 
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(order.getId()).toUri();
 
@@ -44,12 +47,15 @@ public class OrderController {
 			@Valid @RequestBody(required = true) Order order) throws Exception {
 
 		service.update(id, order);
+		service.sendMessage(MessageType.UPINSERTED, order);
 	}
 
 	@DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public void delete(@PathVariable(name = "id", required = true) String id) throws Exception {
 
-		service.deleteById(id);
+		Order order = service.findById(id);
+		service.deleteById(order.getId());
+		service.sendMessage(MessageType.DELETED, order);
 	}
 
 	@GetMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

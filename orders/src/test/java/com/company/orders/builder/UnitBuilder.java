@@ -20,4 +20,9 @@ public class UnitBuilder {
 		return unit;
 	}
 
+	public UnitBuilder withId(String id) {
+		this.id = id;
+		return this;
+	}
+
 }

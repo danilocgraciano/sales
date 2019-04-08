@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +35,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @WebMvcTest(OrderController.class)
 public class OrderControllerTest {
 
-
 	@Autowired
 	protected MockMvc mvc;
 
@@ -48,7 +48,7 @@ public class OrderControllerTest {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		Order order = new OrderBuilder().buildDefault();
+		Order order = new OrderBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 		when(service.save(order)).thenReturn(order);
 
 		mvc.perform(post(this.uri).contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -62,7 +62,7 @@ public class OrderControllerTest {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		Order order = new OrderBuilder().buildDefault();
+		Order order = new OrderBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 		when(service.save(order)).thenReturn(order);
 
 		mvc.perform(put(this.uri + "/" + order.getId()).contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -73,7 +73,8 @@ public class OrderControllerTest {
 	@Test
 	public void remove() throws Exception {
 
-		Order order = new OrderBuilder().buildDefault();
+		Order order = new OrderBuilder().withId(UUID.randomUUID().toString()).buildDefault();
+		when(service.findById(order.getId())).thenReturn(order);
 		mvc.perform(delete(this.uri + "/" + order.getId()).contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(status().isOk());
 
@@ -82,7 +83,7 @@ public class OrderControllerTest {
 	@Test
 	public void findOne() throws Exception {
 
-		Order order = new OrderBuilder().buildDefault();
+		Order order = new OrderBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 
 		when(service.findById(order.getId())).thenReturn(order);
 
@@ -93,8 +94,8 @@ public class OrderControllerTest {
 	@Test
 	public void findAll() throws Exception {
 
-		Order order1 = new OrderBuilder().buildDefault();
-		Order order2 = new OrderBuilder().buildDefault();
+		Order order1 = new OrderBuilder().withId(UUID.randomUUID().toString()).buildDefault();
+		Order order2 = new OrderBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 
 		when(service.findAll(PageRequest.of(0, 20))).thenReturn(new PageImpl<Order>(Arrays.asList(order1, order2)));
 
@@ -104,6 +105,4 @@ public class OrderControllerTest {
 				.andExpect(jsonPath("$.content[1].id", equalTo(order2.getId())));
 	}
 
-
-	
 }

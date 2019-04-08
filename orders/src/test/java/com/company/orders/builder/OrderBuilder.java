@@ -75,4 +75,9 @@ public class OrderBuilder {
 		return this;
 	}
 
+	public OrderBuilder withId(String id) {
+		this.id = id;
+		return this;
+	}
+
 }

@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +48,7 @@ public class CustomerControllerTest {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		Customer customer = new CustomerBuilder().buildDefault();
+		Customer customer = new CustomerBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 		when(service.save(customer)).thenReturn(customer);
 
 		mvc.perform(post(this.uri).contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -61,7 +62,7 @@ public class CustomerControllerTest {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		Customer customer = new CustomerBuilder().buildDefault();
+		Customer customer = new CustomerBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 		when(service.save(customer)).thenReturn(customer);
 
 		mvc.perform(put(this.uri + "/" + customer.getId()).contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -72,7 +73,7 @@ public class CustomerControllerTest {
 	@Test
 	public void remove() throws Exception {
 
-		Customer customer = new CustomerBuilder().buildDefault();
+		Customer customer = new CustomerBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 		mvc.perform(delete(this.uri + "/" + customer.getId()).contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(status().isOk());
 
@@ -81,7 +82,7 @@ public class CustomerControllerTest {
 	@Test
 	public void findOne() throws Exception {
 
-		Customer customer = new CustomerBuilder().buildDefault();
+		Customer customer = new CustomerBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 
 		when(service.findById(customer.getId())).thenReturn(customer);
 
@@ -92,8 +93,8 @@ public class CustomerControllerTest {
 	@Test
 	public void findAll() throws Exception {
 
-		Customer customer1 = new CustomerBuilder().buildDefault();
-		Customer customer2 = new CustomerBuilder().buildDefault();
+		Customer customer1 = new CustomerBuilder().withId(UUID.randomUUID().toString()).buildDefault();
+		Customer customer2 = new CustomerBuilder().withId(UUID.randomUUID().toString()).buildDefault();
 
 		when(service.findAll(PageRequest.of(0, 20)))
 				.thenReturn(new PageImpl<Customer>(Arrays.asList(customer1, customer2)));

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.company.orders.base.BaseService;
 import com.company.orders.entity.order.ItemOrder;
 import com.company.orders.entity.order.Order;
+import com.company.orders.messaging.MessageType;
 import com.company.orders.repository.order.OrderRepository;
 
 @Service
@@ -17,6 +18,9 @@ public class OrderService implements BaseService<Order, String> {
 
 	@Autowired
 	private OrderRepository repository;
+
+	@Autowired
+	private OrderMessageService messageService;
 
 	@Override
 	public Order save(Order e) {
@@ -26,7 +30,8 @@ public class OrderService implements BaseService<Order, String> {
 			itemOrder.setOrder(e);
 		}
 
-		return repository.save(e);
+		e = repository.save(e);
+		return e;
 	}
 
 	@Override
@@ -63,6 +68,10 @@ public class OrderService implements BaseService<Order, String> {
 	@Override
 	public Page<Order> findAll(Order e, Pageable pageable) {
 		return repository.findAll(Example.of(e), pageable);
+	}
+
+	public void sendMessage(MessageType type, Order order) {
+		messageService.send(type, order);
 	}
 
 }
